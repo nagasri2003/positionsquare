@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StoryShop - Company Assignment</title>
+    <!-- Bootstrap CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <!-- Custom Styles -->
+    <style>
+        /* General Typography and Spacing */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+            margin-top: 0;
+        }
+        p, .lead, .card-text {
+            line-height: 1.6;
+            word-spacing: 1px;
+        }
+        /* REMOVED .section-spacing CSS rule as spacing is now managed by Bootstrap classes. */
+
+/* Smooth transition for all buttons */
+button, .btn {
+    transition: background-color 0.3s ease, color 0.3s ease !important;
+}
+
+/* On hover: background = light violet, text = white */
+button:hover, 
+.btn:hover {
+    background-color: #9370DB !important; /* Light Violet */
+    color: #ffffff !important;
+    border-color: #9370DB !important;
+}
+
+
+
+        /* Color Variables & Custom Classes */
+        :root {
+            --dark-bg: #000000; /* Pure Black for Navbar, Main Footer */
+            --sub-footer-bg: #1A1A1A; /* Slightly lighter dark for the copyright strip */
+            --cta-box-bg: #2B2B2B; /* Distinct darker gray for the CTA box */
+            --teal-accent: #38c8b4; /* Teal/Mint for buttons and Featured title */
+            --blue-accent: #4AC0E8; /* Light Blue for "How does it works" title */
+            --timeline-tan: #FFDAB9; /* Light Tan/Peach for timeline line and accents */
+            --timeline-dot-border: #adb5bd; /* Border color for the number circle */
+            --text-secondary-light: #a0a0a0; /* Lighter shade of gray for body text */
+            --dark-blue-bg: #111b27; /* Dark blue/almost black color from the featured section image */
+        }
+
+        /* Header Icons - Default Blue */
+.navbar .nav-link i {
+    color: var(--blue-accent) !important; /* Light Blue */
+    transition: color 0.3s ease;
+}
+
+/* Hover Effect - Light Violet */
+.navbar .nav-link:hover i {
+    color: #9370DB !important; /* Light Violet */
+}
+
+
+        /* IMPORTANT: Setting dark background to the color from the image for smoother transition */
+        .bg-dark-custom { 
+             background-color: var(--dark-blue-bg) !important;
+        }
+        .bg-sub-footer { background-color: var(--sub-footer-bg) !important; }
+        .footer-cta-box {
+            background-color: var(--cta-box-bg);
+            padding: 2rem !important;  
+        }
+        .text-blue-custom { color: var(--blue-accent) !important; }
+        .text-teal-custom { color: var(--teal-accent) !important; }
+        
+        .btn-custom {
+            background-color: var(--teal-accent);
+            border-color: var(--teal-accent);
+            color: #ffffff; /* White text for all standard custom buttons */
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            border-radius: 0.5rem;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .btn-custom:hover {
+            background-color: #2da191;
+            border-color: #2da191;
+            color: #ffffff;
+        }
+        
+        /* ============================================= */
+        /* NAVBAR STYLES (Fixed and Transparent on Load) */
+        /* ============================================= */
+        .navbar {
+            background-color: transparent !important; /* Starts transparent */
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1030;
+            transition: background-color 0.4s ease; /* Smooth transition */
+            padding-top: 1.5rem !important;
+            padding-bottom: 1.5rem !important;
+        }
+        /* Class added by JS on scroll */
+        .navbar.scrolled {
+            background-color: var(--dark-blue-bg) !important; /* Use dark blue for scrolled background */
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+        
+        @media (min-width: 992px) {
+            .navbar .dropdown:hover .dropdown-menu {
+                display: block;
+                margin-top: 0;
+            }
+        }
+
+
+        .navbar-brand { letter-spacing: 0.1rem; }
+        .navbar small {
+            font-size: 0.6rem;
+            letter-spacing: 0.15rem;
+            color: #999 !important; /* Grayish text */
+        }
+        .nav-link, .navbar-icon { color: #ffffff !important; font-weight: 500; }
+        .navbar-nav .dropdown-menu { background-color: var(--dark-blue-bg); border: none; }
+        .navbar-nav .dropdown-item { color: #ffffff; }
+        .navbar-nav .dropdown-item:hover { background-color: #2b3137; }
+
+        /* ============================================= */
+        /* HERO SECTION (Video Background) */
+        /* ============================================= */
+        .hero-section {
+            background-color: var(--dark-blue-bg); /* Match background to featured strip color */
+            height: 90vh; /* Adjusted for image match */
+            display: flex;
+            align-items: center;
+            color: #ffffff;
+            position: relative;
+            overflow: hidden;
+            padding-bottom: 0 !important; /* Remove bottom padding */
+        }
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.6); /* Dark overlay for text visibility */
+            z-index: 2;
+        }
+        .hero-content {
+             position: relative;
+             z-index: 3;
+             /* Adjusted top padding to shift content lower */
+             padding-top: 15rem !important; 
+             padding-bottom: 10rem !important; 
+        }
+        /* Video Styling */
+        #background-video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; 
+            transform: translate(-50%, -50%);
+            z-index: 1;
+        }
+        
+        /* ============================================= */
+        /* FEATURED CARD SECTION 3 - Image Match Adjustments */
+        /* ============================================= */
+        /* Used to pull the card up. Adjusted slightly less negative margin to reveal space. */
+        .mt-n6 { margin-top: -6rem !important; }
+        
+        .featured-card {
+            /* Restored subtle border radius */
+            border-radius: 0.75rem !important; 
+            overflow: hidden;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            z-index: 10;
+            position: relative;
+        }
+        .featured-card .col-lg-6 {
+             background-color: #ffffff !important;
+        }
+        
+        /* Ensures image covers the full height and width of its container (col-lg-6) */
+        .featured-card img {
+            height: 100%; 
+            width: 100%;
+            object-fit: cover;
+            display: block; 
+        }
+
+        /* Wrapper for the narrow, centered card */
+        .life-stories-wrapper {
+             padding-left: 0 !important;
+             padding-right: 0 !important;
+        }
+
+        /* Adjusted padding and sizing for content side */
+        .featured-card-content {
+             display: flex;
+             flex-direction: column;
+             justify-content: center;
+             height: 100%;
+             padding: 3.5rem !important;
+        }
+        
+        .featured-card-content h3 {
+             margin-top: 0 !important;
+        }
+        .featured-card-content p.text-secondary {
+             font-size: 0.85rem; /* Smaller font size */
+             color: var(--text-secondary-light) !important; /* Lighter gray */
+        }
+        .featured-card-content p.display-6 {
+             font-size: 2.5rem;
+             margin-bottom: 1.5rem !important;
+        }
+
+
+        /* ============================================= */
+        /* FEATURED STRIP SECTION 2.5 - Integration */
+        /* This section creates the smooth dark area under the video */
+        /* ============================================= */
+        .featured-strip-section {
+            background-color: var(--dark-blue-bg);
+            /* Adjusted margin-top to achieve zero gap with the overlapping white card below */
+            margin-top: -8rem; 
+            /* Reduced padding-bottom to bring the card up higher */
+            padding-top: 10rem !important;
+            padding-bottom: 3rem !important; /* Increased padding to create the desired visible dark gap */
+        }
+        .featured-strip-section h2 {
+            color: var(--teal-accent);
+        }
+
+        /* ============================================= */
+        /* OTHER STORYSTRIPS SECTION 5 - Hover, Icons, and Spacing */
+        /* ============================================= */
+        .other-strips-header {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--dark-blue-bg); /* Use the dark blue color for the heading text */
+        }
+        
+        /* Navigation Controls (Arrows) */
+        .other-strips-controls button {
+            border-radius: 0 !important; /* Square structure */
+            width: 40px; 
+            height: 40px; 
+            line-height: 1;
+            /* Using the Light Blue accent color for border and icon */
+            border: 1px solid var(--blue-accent) !important;
+            color: var(--blue-accent) !important;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            transition: all 0.2s ease;
+        }
+        .other-strips-controls button:hover {
+            background-color: var(--blue-accent);
+            color: #ffffff !important;
+        }
+
+        footer a:hover {
+          color: #0dcaf0 !important; /* teal/cyan hover effect */
+        }
+
+        .btn-outline-info {
+          color: #0dcaf0;
+          border-color: #0dcaf0;
+        }
+
+        .btn-outline-info:hover {
+          background-color: #0dcaf0;
+          color: #000;
+        }
+
+
+        /* Product Card Styles */
+        .story-strip-card {
+            border-radius: 0 !important; /* Sharp corners */
+            overflow: hidden;
+            box-shadow: none; /* No shadow initially */
+            transition: box-shadow 0.3s ease-in-out; 
+            cursor: pointer;
+        }
+
+        /* Show subtle shadow only when hovering over the card */
+        .story-strip-card:hover {
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.10) !important;
+        }
+
+        /* Card Image - remains stationary */
+        .story-strip-card .card-img-top {
+            border-radius: 0 !important;
+        }
+
+        /* Content Wrapper - this is the element that moves up on hover */
+        .card-content-wrapper {
+            padding: 1.5rem; 
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            /* Apply transition for the hover effect */
+            transition: transform 0.3s ease-in-out; 
+        }
+
+        /* Apply hover effect only to the content wrapper */
+        .story-strip-card:hover .card-content-wrapper {
+            transform: translateY(-5px); 
+        }
+
+        .story-strip-card .card-body {
+            /* Remove default padding from card-body and let card-content-wrapper handle it */
+            padding: 0 !important; 
+            height: 100%;
+        }
+        /* Header icons default style */
+        .header a i, 
+        .header .icon, 
+        .header .nav-link i {
+            color: #ffffff; /* Default White (assuming dark header bg) */
+            transition: color 0.3s ease;
+        }
+
+        /* Hover effect - Light Violet */
+        .header a:hover i, 
+        .header .icon:hover, 
+        .header .nav-link:hover i {
+            color: #9370DB !important;
+        }
+
+        
+        .story-strip-card .price {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark-bg);
+            margin-top: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        /* Button style adjustment for placement (aligned left, not full width) */
+        .story-strip-card .btn-custom {
+            padding: 0.5rem 1.5rem; /* Make button smaller */
+            /* Ensure button alignment to the bottom-left within the content area */
+            align-self: flex-start;
+            width: auto !important;
+        }
+
+        /* ============================================= */
+        /* SECTION 4: HOW DOES IT WORK TIMELINE STYLING (UPDATED) */
+        /* ============================================= */
+        .timeline-container {
+            position: relative;
+            padding: 2rem 0;
+        }
+        /* Central Line Color (Tan/Light-Orange) */
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px; 
+            background-color: var(--timeline-tan); /* Using CSS variable */
+            top: 0;
+            bottom: 0;
+            z-index: 1;
+        }
+        .timeline-item {
+            display: flex;
+            position: relative;
+            margin-bottom: 5rem; /* Adjusted for better spacing between steps */
+            align-items: center;
+            z-index: 2; 
+        }
+        .timeline-content, .timeline-image {
+            width: 50%;
+            padding: 0 1rem;
+        }
+        /* Item 1 (Odd) - Content Right, Image Left */
+        .timeline-item:nth-child(odd) .timeline-content {
+            order: 2; /* Content on the right */
+            padding-left: 3rem; /* Push content away from the center dot */
+            padding-right: 4rem; /* Padding towards the image */
+            text-align: left;
+        }
+        .timeline-item:nth-child(odd) .timeline-image {
+            order: 1; /* Image on the left */
+            padding-right: 3rem; /* Padding towards the content */
+            padding-left: 4rem;
+        }
+
+        /* Item 2 (Even) - Content Left, Image Right */
+        .timeline-item:nth-child(even) .timeline-content {
+            order: 1; /* Content on the left */
+            padding-right: 3rem; /* Push content away from the center dot */
+            padding-left: 4rem; /* Padding towards the image */
+            text-align: right;
+        }
+        .timeline-item:nth-child(even) .timeline-image {
+            order: 2; /* Image on the right */
+            padding-left: 3rem;
+            padding-right: 4rem;
+        }
+
+        /* Dot/Number styling */
+        .timeline-dot {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px; 
+            height: 50px;
+            background-color: #ffffff;
+            border: 2px solid var(--timeline-tan); /* Using CSS variable */
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 800; 
+            color: var(--dark-bg);
+            font-size: 1.5rem;
+            z-index: 10;
+            /* Simulate background surrounding dot for separation */
+            box-shadow: 0 0 0 5px #f8f9fa; 
+        }
+        /* Diamond shape overlay (Icon Style) */
+        .timeline-dot::before, .timeline-dot::after {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background-color: var(--timeline-tan); /* Using CSS variable */
+            transform: rotate(45deg);
+            z-index: 5;
+        }
+        .timeline-dot::before {
+            left: -8px; 
+            top: 17px; 
+        }
+        .timeline-dot::after {
+            right: -8px; 
+            top: 17px; 
+        }
+        
+        /* Footer Links */
+        .footer .list-unstyled a { font-weight: 400; color: #a0a0a0 !important; }
+        .footer .list-unstyled.about-us-links a { font-weight: 700 !important; color: #ffffff !important; }
+
+        /* Footer CTA Button Styling */
+        .footer-cta-box .btn-outline-light {
+            border-color: #555555 !important; color: #ffffff !important;
+            background-color: transparent !important; padding: 0.5rem 1.5rem; font-weight: 600;
+        }
+        .footer-cta-box .btn-outline-light:hover {
+            background-color: rgba(255, 255, 255, 0.1) !important; border-color: #ffffff !important;
+        }
+        
+        /* ============================================= */
+        /* RESPONSIVE ADJUSTMENTS */
+        /* ============================================= */
+        
+        /* Mobile/Tablet Adjustments (Below 992px) */
+        @media (max-width: 991.98px) {
+            
+            /* Navbar padding adjusted for smaller screen tap target */
+            .navbar {
+                padding-top: 1rem !important;
+                padding-bottom: 1rem !important;
+            }
+
+            /* Hero content padding adjusted */
+            .hero-content {
+                padding-top: 10rem !important;
+                padding-bottom: 5rem !important;
+            }
+
+            /* Featured Strip text spacing simplified for mobile */
+            .featured-strip-section {
+                padding-top: 5rem !important;
+                /* Remove negative margin since hero is shorter and full-width content follows */
+                margin-top: -5rem;
+            }
+            
+            /* Life Stories Card - stacks 100% wide */
+            .life-stories-wrapper {
+                 width: 100% !important;
+                 padding-left: 1rem !important;
+                 padding-right: 1rem !important;
+            }
+            .featured-card-content {
+                 padding: 2rem !important;
+            }
+
+            /* Timeline stacks vertically */
+            .timeline-line { display: none; }
+            .timeline-dot::before, .timeline-dot::after { display: none; }
+            .timeline-dot { position: relative; top: auto; left: auto; transform: none; margin: 1rem auto; }
+            .timeline-item { flex-direction: column; margin-bottom: 2rem; } /* Reduced margin for mobile */
+            
+            /* Mobile order and padding for all items */
+            .timeline-content, .timeline-image { 
+                width: 100%; 
+                padding: 0 1rem 1rem 1rem !important; 
+                text-align: left !important; 
+                order: 2; /* Content and image stack, order 2 is after dot */
+            }
+
+            /* Place dot above content/image */
+            .timeline-dot { order: 1; } 
+
+            /* Override mobile ordering that was implied in desktop CSS */
+            .timeline-item:nth-child(odd) .timeline-content,
+            .timeline-item:nth-child(even) .timeline-content { order: 2; }
+            .timeline-item:nth-child(odd) .timeline-image,
+            .timeline-item:nth-child(even) .timeline-image { order: 3; }
+
+        }
+        
+        /* Small Tablet Adjustments (Below 768px) */
+        @media (max-width: 767.98px) {
+             /* Footer columns stack cleanly by default with Bootstrap's col-6 / col-12 settings, ensuring readability. */
+        }
+        
+        /* Desktop/Wide screen adjustment for Large Card */
+        @media (min-width: 992px) {
+            /* The large card wrapper remains centered and narrower on large screens */
+            .life-stories-wrapper {
+                width: 83.333333%; /* Match col-lg-10 width */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================= -->
+    <!-- SECTION 1: DARK HEADER / NAVIGATION BAR (Initially Transparent/Fixed) -->
+    <!-- ============================================= -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark py-3" id="main-navbar">
+            <div class="container">
+                <div class="d-flex flex-column align-items-start me-4">
+                    <a class="navbar-brand fs-4 fw-bold p-0" href="#">StoryShop</a>
+                    <small class="text-secondary">POWERED BY ORSON</small>
+                </div>
+                
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="mainNavbar">
+                    <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                        <!-- Shop Dropdown -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-white fw-bold mx-2" href="#" id="shopDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
+                            <ul class="dropdown-menu border-0 shadow" aria-labelledby="shopDropdown">
+                                <li><a class="dropdown-item" href="#">Life Stories</a></li>
+                                <li><a class="dropdown-item" href="#">Love Stories</a></li>
+                                <li><a class="dropdown-item" href="#">Employee Engagement</a></li>
+                                <li><a class="dropdown-item" href="#">Birthdays</a></li>
+                                <li><a class="dropdown-item" href="#">Profiles</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item"><a class="nav-link text-white fw-bold mx-2" href="#">About Us</a></li>
+                        <li class="nav-item"><a class="nav-link text-white fw-bold mx-2" href="#">Contact Us</a></li>
+                    </ul>
+
+                    <!-- Icons -->
+                    <div class="d-flex align-items-center">
+                        <a href="#" class="nav-link text-white mx-2"><i class="fas fa-search"></i></a>
+                        <a href="#" class="nav-link text-white mx-2"><i class="fas fa-shopping-cart"></i> <span class="badge text-white">0</span></a>
+                        <a href="#" class="nav-link text-white mx-2 d-none d-lg-inline"><i class="fas fa-user"></i></a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- ============================================= -->
+        <!-- SECTION 2: HERO SECTION (Video Background) -->
+        <!-- ============================================= -->
+        <section class="hero-section mb-0" id="hero-section">
+            <!-- Background Video Element -->
+           <video autoplay loop muted playsinline id="background-video">
+                <!-- IMPORTANT: Using a placeholder URL. REPLACE THIS URL with the actual link to your video of children in motion. -->
+                <source src="https://www.pexels.com/download/video/4321731/" type="video/mp4">
+                <source src="https://www.pexels.com/download/video/4321731/" type="video/webm">
+                Your browser does not support the video tag.
+            </video>
+
+
+            <div class="hero-overlay"></div>
+            <div class="container text-center hero-content">
+                <h1 class="display-3 fw-bold text-white mb-3" style="letter-spacing: -0.05rem;">Lorem ipsum dolor sit amet</h1>
+                <p class="lead text-white mx-auto" style="max-width: 600px; font-size: 1.1rem;">
+                    (Characters with spaces) – 160) Donec id neque erat. Quisque pharetra ipsum fermentum, condimentum urna et, tempor lacus. Pellentesque habitant morbi tristique.
+                </p>
+                <button class="btn btn-custom mt-4">Explore Our Products</button>
+            </div>
+        </section>
+
+        <!-- ============================================= -->
+        <!-- FEATURED TITLE STRIP (Dark separator) - Integrated with Hero -->
+        <!-- ============================================= -->
+        <section class="featured-strip-section mb-0">
+            <div class="container text-center">
+                 <h2 class="fs-2 fw-bold mb-3 text-blue-custom">Featured StoryStrip™</h2>
+                <!-- The paragraph text is correctly set to 'text-white' to match the image -->
+                <p class="lead text-white mx-auto" style="max-width: 700px; font-size: 1rem;">
+                    (Characters with spaces) – 160) Donec id neque erat. Quisque pharetra ipsum fermentum, condimentum urna et, tempor lacus. Pellentesque habitant morbi tristique.
+                </p>
+                 <p class="lead text-black mx-auto" style="max-width: 700px; font-size: 1rem;">
+                    (Characters with spaces) – 160) Donec id neque erat. Quisque pharetra ipsum fermentum, condimentum urna et, tempor lacus. Pellentesque habitant morbi tristique.
+                </p>
+             
+            </div>
+        </section>
+
+        <!-- ============================================= -->
+        <!-- SECTION 3: LARGE TWO-COLUMN CARD (Life Stories) - OVERLAPPING -->
+        <!-- ============================================= -->
+        <!-- The mt-n6 class creates the overlap with the dark section above, matching the design. -->
+        <section class="container mt-n6 mb-5">
+            <div class="row justify-content-center">
+                <!-- Using col-lg-10 to narrow the card and centering it -->
+                <div class="col-12 col-lg-10 life-stories-wrapper">
+                    <div class="row g-0 featured-card mx-0">
+                        <div class="col-12 col-md-6">
+                            <!-- Image must take full width and height of its container -->
+                            <img src="https://uc.uxpin.com/files/450799/452430/image-c08402e3d495c8c47789f22424bc5829-576603.png" class="featured-card-image img-fluid w-100 h-100 object-fit-cover" alt="Woman reading a book">
+                        </div>
+                        <div class="col-12 col-md-6 bg-white p-0">
+                            <!-- Content wrapper to apply internal padding and vertical centering -->
+                            <div class="featured-card-content p-lg-5 p-4">
+                                <h3 class="fw-bold mb-3">Life Stories</h3>
+                                <p class="text-secondary mb-3">
+                                    (Characters with spaces) – 140) Vestibulum vitae lacinia bibendum eu eu odio. Etiam augue diam, malesuada eu vulputate non, malesuada eu sem.
+                                </p>
+                                <p class="display-6 fw-bold mb-4">$99</p>
+                                <button class="btn btn-custom w-100">View Details</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================= -->
+        <!-- SECTION 5: OTHER STORYSTRIPS (3-Card Grid) - UPDATED -->
+        <!-- ============================================= -->
+        <!-- Spacing: mt-5 pb-4 provides separation from the card above and tightness to the timeline below. -->
+        <section class="container mt-5 pb-4">
+            <div class="d-flex justify-content-between align-items-end mb-4">
+                <!-- Heading color is custom blue-accent -->
+                <h2 class="other-strips-header fw-bold text-blue-custom">Other StoryStrips™</h2>
+                <div class="d-none d-md-flex other-strips-controls">
+                    <!-- Arrows use custom square styling for consistency -->
+                    <button class="btn btn-outline-secondary me-2"><i class="fas fa-chevron-left"></i></button>
+                    <button class="btn btn-outline-secondary"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+            
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                <!-- Card 1: Love Stories -->
+                <div class="col">
+                    <div class="card h-100 border-0 shadow-sm story-strip-card">
+                        <img src="https://uc.uxpin.com/files/450799/452430/image-259f6f6ea9e9cc17b914c5ec7119cad0-a7ddfc.png" class="card-img-top" alt="Love Stories Image">
+                        <div class="card-body">
+                             <!-- This wrapper will apply the hover effect and control spacing -->
+                            <div class="card-content-wrapper">
+                                <div>
+                                    <h5 class="card-title">Love Stories</h5>
+                                    <p class="card-text mb-3">
+                                        (Characters with spaces) – 140) Vestibulum vitae lacinia bibendum eu eu odio. Etiam augue diam, malesuada eu vulputate non, malesuada eu sem.
+                                    </p>
+                                    <p class="price">$30</p>
+                                </div>
+                                <!-- Button is intentionally not w-100 to stick to the left -->
+                                <button class="btn btn-custom">View Details</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: Employee Engagement -->
+                <div class="col">
+                    <div class="card h-100 border-0 shadow-sm story-strip-card">
+                        <img src="https://uc.uxpin.com/files/450799/452430/image-a2331a9ba977c326d6229b0b1800f792-ec0726.png" class="card-img-top" alt="Employee Engagement Image">
+                        <div class="card-body">
+                             <div class="card-content-wrapper">
+                                <div>
+                                    <h5 class="card-title">Employee Engagement</h5>
+                                    <p class="card-text mb-3">
+                                        (Characters with spaces) – 140) Vestibulum vitae lacinia bibendum eu eu odio. Etiam augue diam, malesuada eu vulputate non, malesuada eu sem.
+                                    </p>
+                                    <p class="price">$45</p>
+                                </div>
+                                <button class="btn btn-custom">View Details</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Birthdays -->
+                <div class="col">
+                    <div class="card h-100 border-0 shadow-sm story-strip-card">
+                        <img src="https://uc.uxpin.com/files/450799/452430/image-62e99d239b50f78bbfa8a00bbb6c6a58-04244c.png" class="card-img-top" alt="Birthdays Image">
+                        <div class="card-body">
+                             <div class="card-content-wrapper">
+                                <div>
+                                    <h5 class="card-title">Birthdays</h5>
+                                    <p class="card-text mb-3">
+                                        (Characters with spaces) – 140) Vestibulum vitae lacinia bibendum eu eu odio. Etiam augue diam, malesuada eu vulputate non, malesuada eu sem.
+                                    </p>
+                                    <p class="price">$35</p>
+                                </div>
+                                <button class="btn btn-custom">View Details</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ============================================= -->
+        <!-- SECTION 4: HOW DOES IT WORK TIMELINE -->
+        <!-- ============================================= -->
+        <!-- Spacing remains tight as requested (pt-5 pb-5) -->
+        <section class="pt-5 pb-5" style="background-color: #f8f9fa;">
+            <div class="container">
+                <div class="text-center mb-5">
+                    <h2 class="display-5 fw-bold text-blue-custom">How does it works</h2>
+                    <p class="lead text-secondary mx-auto" style="max-width: 700px;">
+                        (Characters with spaces) – 160) Donec id neque erat. Quisque pharetra ipsum fermentum, condimentum urna et, tempor lacus. Pellentesque habitant morbi tristique.
+                    </p>
+                    
+                </div>
+
+                <!-- Timeline container using the new structure and styling -->
+                <div class="timeline-container d-flex justify-content-center">
+                    <!-- Central Line (desktop only) -->
+                    <div class="timeline-line d-none d-lg-block"></div>
+                    
+                    <div class="w-100" style="max-width: 1000px;">
+                        
+                        <!-- Item 1: Content Right (Odd) -->
+                        <div class="timeline-item">
+                            <div class="timeline-image">
+                                <img src="https://uc.uxpin.com/files/450799/452430/image-439a116e012ba27e25f86ad45a6accf0-61c8a1.png" class="img-fluid rounded-3 shadow-sm" alt="AI Director Image">
+                            </div>
+                            <div class="timeline-dot">1</div>
+                            <div class="timeline-content">
+                                <h4 class="fw-bold">The AI Director Directs</h4>
+                                <p class="text-secondary">
+                                    (Characters with spaces) – 140) Vestibulum vitae lacinia bibendum eu eu odio. Etiam augue diam, malesuada eu vulputate non, malesuada eu sem.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Item 2: Content Left (Even) -->
+                        <div class="timeline-item">
+                            <div class="timeline-content">
+                                <h4 class="fw-bold">Users Answer</h4>
+                                <p class="text-secondary">
+                                    (Characters with spaces) – 140) Vestibulum vitae lacinia bibendum eu eu odio. Etiam augue diam, malesuada eu vulputate non, malesuada eu sem.
+                                </p>
+                            </div>
+                            <div class="timeline-dot">2</div>
+                            <div class="timeline-image">
+                                <img src="https://uc.uxpin.com/files/450799/452430/image-9acac3f079bf614685e9715a6b6ef389-f9c4bb.png" class="img-fluid rounded-3 shadow-sm" alt="Users Answer Image">
+                            </div>
+                        </div>
+
+                        <!-- Item 3: Content Right (Odd) -->
+                        <div class="timeline-item">
+                            <div class="timeline-image">
+                                <img src="https://uc.uxpin.com/files/450799/452430/image-259f6f6ea9e9cc17b914c5ec7119cad0-a7ddfc.png" class="img-fluid rounded-3 shadow-sm" alt="The Magic Begins Image">
+                            </div>
+                            <div class="timeline-dot">3</div>
+                            <div class="timeline-content">
+                                <h4 class="fw-bold">The Magic Begins!</h4>
+                                <p class="text-secondary">
+                                    (Characters with spaces) – 140) Vestibulum vitae lacinia bibendum eu eu odio. Etiam augue diam, malesuada eu vulputate non, malesuada eu sem.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    
+<!-- ============================================= -->
+<!-- SECTION 6: DARK FOOTER -->
+<!-- ============================================= -->
+<footer class="bg-dark-custom text-white pt-5">
+    <div class="container pb-4">
+        <div class="row">
+            <!-- StoryShop Logo/Brand -->
+            <div class="col-12 col-md-3 mb-4">
+                <div class="d-flex flex-column align-items-start">
+                    <a class="navbar-brand fs-4 fw-bold text-white p-0" href="#">StoryShop</a>
+                    <small class="text-secondary">POWERED BY ORSON</small>
+                </div>
+            </div>
+
+            <!-- Footer Links Columns (Responsive Grid) -->
+            <div class="col-6 col-md-2 mb-4">
+                <h5 class="fw-bold mb-3">Products</h5>
+                <ul class="list-unstyled">
+                    <li><a href="#" class="text-decoration-none text-secondary">Life Stories</a></li>
+                    <li><a href="#" class="text-decoration-none text-secondary">Love Stories</a></li>
+                    <li><a href="#" class="text-decoration-none text-secondary">Employee Engagement</a></li>
+                    <li><a href="#" class="text-decoration-none text-secondary">Birthdays</a></li>
+                    <li><a href="#" class="text-decoration-none text-secondary">Profiles</a></li>
+                </ul>
+            </div>
+
+            <div class="col-6 col-md-2 mb-4">
+                <h5 class="fw-bold mb-3">About Us</h5>
+                <!-- The "Contact Us" and "Privacy Policy" links are visually bold/headers in the image -->
+                <ul class="list-unstyled about-us-links">
+                    <li><a href="#" class="text-decoration-none text-white fw-bold">Contact Us</a></li>
+                    <li><a href="#" class="text-decoration-none text-white fw-bold">Privacy Policy</a></li>
+                </ul>
+            </div>
+            
+            <div class="col-6 col-md-2 mb-4">
+                <h5 class="fw-bold mb-3">Account</h5>
+                <ul class="list-unstyled">
+                    <li><a href="#" class="text-decoration-none text-secondary">Login</a></li>
+                    <li><a href="#" class="text-decoration-none text-secondary">Wishlist</a></li>
+                    <li><a href="#" class="text-decoration-none text-secondary">Checkout</a></li>
+                </ul>
+            </div>
+
+            <!-- CTA Box -->
+            <div class="col-md-3 mb-4">
+                <div class="p-4 rounded-3 footer-cta-box">
+                    <p class="mb-3">Interested in how Orson can strengthen connections in your app?</p>
+                    <button class="btn btn-outline-light w-100">Learn More</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+   <!-- Copyright -->
+<div class="text-center py-3" style="background-color: #20232a;">
+  <small class="text-secondary">&copy; 2023 Orson. All Rights Reserved.</small>
+</div>
+
+</footer>
+
+    <!-- Bootstrap JS Bundle and Custom Scroll Script -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navbar = document.getElementById('main-navbar');
+            const hero = document.getElementById('hero-section');
+            
+            // Check if hero exists to avoid errors in case of partial content load
+            if (!hero) return; 
+
+            // Offset to start changing the navbar color slightly before the hero ends
+            const scrollOffset = 50; 
+
+            const updateNavbar = () => {
+                // Change to solid black when scrolling past the hero content (minus offset)
+                if (window.scrollY > hero.offsetHeight - navbar.offsetHeight - scrollOffset) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            };
+
+            // Run on load and on scroll
+            updateNavbar();
+            window.addEventListener('scroll', updateNavbar);
+        });
+    </script>
+</body>
+</html>
